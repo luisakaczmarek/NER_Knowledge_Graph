@@ -1,4 +1,4 @@
-# **Part 1 — Named Entity Recognition (NER) & Knowledge Graph Construction**
+# **Named Entity Recognition (NER) & Knowledge Graph Construction**
 
 This repository contains a Jupyter notebook that explores **Named Entity Recognition (NER)** and the subsequent **construction of a Knowledge Graph** from the extracted entities and relationships.
 It walks through the full pipeline — from **data loading and preprocessing**, through **NER model training and evaluation**, to **visualizing entities and their interconnections** within a knowledge graph.
