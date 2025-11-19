@@ -1,41 +1,78 @@
-# **Part 1: NER_Knowledge_Graph & Q&A**
-xx (to be edited)
+# **Part 1 — Named Entity Recognition (NER) Knowledge Graph**
 
-## **Part 2: LLM Grader Chatbot**
+This repository contains a Jupyter notebook for experimenting with Named Entity Recognition (NER). 
+It walks through data loading, preprocessing, model training/evaluation, and visualization steps (see the notebook for details).
 
+## Contents
 
-This project is a Streamlit web app that evaluates student answers against reference answers using NLP techniques (TF-IDF, token overlap, sentiment, etc.).
+- `Part_1_NER.ipynb` — the main tutorial/workbook
 
-Functionalities of the streamlit app:
+- `requirements.txt` — minimal list of Python packages inferred from the notebook imports (unpinned to reduce conflicts)
 
-1.  Loads questions and target (“standard”) answers from Q&A_db_practice.json.
-2.  Shows one question at a time.
-3.	Lets the user (student) type an answer.
-4.	Scores it by comparing it to the reference answer using text similarity metrics (e.g., ROUGE-like F1, TF-IDF cosine).
-5.	Explains differences using either rule-based text comparison or a small LLM model.
-6.	Optionally analyzes user feedback sentiment (via VADER).
-7.	Logs results and allows CSV download.
+## Quick Start
 
-### **Approach followed and rationale**
-
-To successfully design an automated system that can evaluate responses to open-ended questions in ML we created a streamlit-based chatbot that compares answers to a curated dataset of “standard” answers from the *Q&A_db_practice.json* dataset. Instead of relying on deep learning models or external APIs, we used deterministic text similarity metrics for transparent evaluation. Specifically, three complementary methods were combined:
-1. Token F1 overlap (to capture exact keyword matching)
-2. ROUGE-L F1 (to measure shared sequence structure and phrasing)
-3. TF-IDF cosine similarity (to detect overall semantic similarity)
-
-Each metric contributes to a weighted composite score ranging from 0 to 100, giving us a balanced assessment between lexical precision and contextual relevance. Also, we used a rule-based feedback function that highlights missing key terms and phrasing differences to justify why answers received a particular score. We also included sentiment analysis using the VADER lexicon, enabling qualitative feedback assessment, and stores all results for later analysis.
-
-This approach prioritizes interpretability and reliability which is important for an academic grading assistant that must run consistently without GPU dependencies. However, it does not capture deeper semantic relationships or rephrased explanations as effectively as transformer-based models. To improve this, we could fine-tune or integrate a LLM such as FLAN-T5, BERTScore, or GPT-style evaluation frameworks to get contextual scoring and natural language feedback. Another improvement would be supervised learning on annotated student responses, where a regression or classification model learns to predict human-assigned scores. Also, methods like embedding-based similarity (e.g., Sentence-BERT) or semantic entailment detection could make scoring more reasonable by understanding meaning rather than surface-level similarity. To successfully do this we would need labeled data, more computational resources, and robust validation to ensure fairness and explainability.
-
----
-
-## 🚀 Getting Started
-
-Follow these steps to set up and run the app locally.
-
-### 1️⃣ Clone the repository
+### 1) Create and activate a virtual environment (recommended)
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo-name>.git
-cd <your-repo-name>
+python3 -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 2) Run Jupyter
+
+```bash
+python -m pip install jupyter
+jupyter notebook  # or: jupyter lab
+```
+
+## Fixing the `externally-managed-environment` error (macOS/Homebrew)
+
+macOS with Homebrew ships Python as an **externally managed environment** (see [PEP 668](https://peps.python.org/pep-0668/)). 
+If you see the error, do **one** of the following:
+
+1. **Use a virtualenv** (preferred):
+
+   ```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+   ```
+
+2. **Use Conda (alternative)**:
+
+   ```bash
+conda create -n ner python=3.11 -y
+conda activate ner
+pip install -r requirements.txt
+   ```
+
+3. **Use pipx for CLI apps** (not typical for libraries used in notebooks):
+
+   ```bash
+brew install pipx
+pipx install some-cli
+   ```
+
+4. **(Not recommended)** Override with `--break-system-packages`:
+
+   ```bash
+pip install --break-system-packages -r requirements.txt
+   ```
+
+## Notes & Recommendations
+
+- Avoid `!pip install ...` inside notebooks on macOS/Homebrew because it triggers PEP 668 issues. Prefer installing into a virtualenv **before** running the notebook.
+
+- If using spaCy models (e.g., `en_core_web_sm`), install them explicitly:
+
+  ```bash
+python -m spacy download en_core_web_sm
+  ```
+
+- If you use Hugging Face models, first `pip install transformers datasets accelerate evaluate` and ensure you have a compatible PyTorch build for your platform.
+
+- To export results reproducibly, consider pinning versions in `requirements.txt` (e.g., `pandas==2.2.*`). Start unpinned while prototyping, then pin once stable.
+
 
